@@ -1,0 +1,17 @@
+
+
+Load "c-state.repl.index.fth" and run "repl" word.
+
+
+
+Coments and parsing words works properly:
+
+  : foo ." adding some semantics" c{ ( x -- ) if ." true" else ." false" then }c ; immediate
+
+  : bar foo ; 1 bar
+
+
+Even "cs-roll" works as expected, so the "else" word can be defined as the following:
+
+  : else c{ ahead [ 1 cs-roll ] then }c ; immediate
+
