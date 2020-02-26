@@ -69,16 +69,22 @@
 \ The expressions with the special parsing words should be transformed as the following:
 \   "X ccc"  ==> "[ [: X ccc ;] ct-xt ]"  (but it isn't supported by some systems yet)
 \           <==> "[: X ccc ;] [ c1 if postpone ct-xt else postpone execute then ]"
+\           <==> "[: X ccc ;] [ c1 if 'ct-xt else 'execute then compile, ]"
+\           <==> "[: X ccc ;] [ c1 if ] ct-xt [ else ] execute [ then ]"
+\           <==> "[ c1 if ] [: X ccc ;] ct-xt [ else ] X ccc [ then ]"
+\   (assuming that "if" properly works in interpretation state)
 \
 \ So the wrapper for a special parsing word X can have the following form:
-\   : X  postpone [:  postpone X  postpone ;]  c1 if postpone ct-xt else postpone execute then ;  immediate
+\   : X  c1 if  postpone [:  postpone X  postpone ;]  postpone ct-xt  exit then  postpone X  ;  immediate
 \
 : special-parsing-words< ( "ccc" -- )
   [: ( addr u -- )
+    2>r postpone c1 postpone if
       [: postpone [: ;] compile,
-      compilation-sem,
-      [: postpone ;] ;] compile,
-      [: c1 if postpone ct-xt else postpone execute then ;] compile,
+      2r@ compilation-sem,
+      [: postpone ;] postpone ct-xt ;] compile,
+    postpone exit postpone then
+    2r> compilation-sem,
   ;] for-each-def-in-parse-area
 ;
 
