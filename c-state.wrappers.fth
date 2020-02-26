@@ -43,6 +43,14 @@
     2dup unavailable if show-warning-missed-word else r@ execute then
   repeat 2drop rdrop
 ;
+: for-each-def-in-parse-area ( xt -- )
+  \ xt ( addr u -- ) \ xt is called to compile the body of the redefined word
+  [: ( xt addr u -- xt )
+    2dup depth >r start-def-named depth r> - ( execute-balance ) 2 + n>r
+      rot dup >r execute r>
+    nr> drop end-def immediate
+  ;] for-each-word-in-parse-area drop
+;
 
 
 \ Examples of wrappers for non-parsing special words:
@@ -51,10 +59,8 @@
 \
 : special-words< ( "ccc" -- )
   [: ( addr u -- )
-    2dup 2>r start-def-named
-      2r> compilation-lit, postpone ct-compilation
-    end-def immediate
-  ;] for-each-word-in-parse-area
+    compilation-lit, postpone ct-compilation
+  ;] for-each-def-in-parse-area
 ;
 
 
@@ -67,13 +73,11 @@
 \
 : special-parsing-words< ( "ccc" -- )
   [: ( addr u -- )
-    2dup 2>r start-def-named
       [: postpone [: ;] compile,
-      2r> compilation-sem,
+      compilation-sem,
       [: postpone ;] ;] compile,
       [: c1 if postpone ct-xt else postpone execute then ;] compile,
-    end-def immediate
-  ;] for-each-word-in-parse-area
+  ;] for-each-def-in-parse-area
 ;
 
 
