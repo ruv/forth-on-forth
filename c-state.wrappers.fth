@@ -35,6 +35,7 @@
 : end-def ( c-addr u -- ) postpone ; ;
 
 
+: ?state ( -- ) state @ 0= if -14 throw then ; \ -14 "interpreting a compile-only word"
 : show-warning-missed-word ( addr u -- ) ." \ Info, a mentioned word isn't found: " type cr ;
 
 : for-each-word-in-parse-area ( xt -- )
@@ -47,6 +48,7 @@
   \ xt ( addr u -- ) \ xt is called to compile the body of the redefined word
   [: ( xt addr u -- xt )
     2dup depth >r start-def-named depth r> - ( execute-balance ) 2 + n>r
+      postpone ?state
       rot dup >r execute r>
     nr> drop end-def immediate
   ;] for-each-word-in-parse-area drop

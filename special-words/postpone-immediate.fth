@@ -17,11 +17,13 @@ variable state-dirty  \ private
 ;
 
 : postpone ( -- ) \ "name"
+  ?state
   parse-lexeme resolve-word-stateful ?nf
   swap lit, if ['] execute-compiling else ['] compile, then compile,
 ; immediate
 
 : [compile] ( -- ) \ "name"
+  ?state
   parse-lexeme resolve-word-stateful ?nf
   if lit, ['] execute-compiling then compile,
 ; immediate
