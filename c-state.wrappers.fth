@@ -110,6 +110,18 @@ forth-wl-new exch-current
   [defined] cs-drop [if]  : cs-drop (   -- ) y{ c1 if itself, exit then cs-drop }y ;  [then]
 exch-current drop
 
+\ Some other words
+forth-wl-new exch-current
+  [defined] (local) [if]  : (local) ( a u -- ) y{ c1 if slit, itself, exit then (local) }y ;  [then]
+  \ NB: the "{:" or "{" word should be defined via this "(local)" to be allowed in "c{ }c"
+  \ (a wrapper for "{:" is just longer than usual wrappers)
+  [defined] {:      [if]
+    : {:    ( "ccc :}" -- )
+        c1 abort" '{:' is not supported in 'c{ }c' yet"  postpone {:
+    ; immediate
+  [then]
+exch-current drop
+
 
 \ Well known basic code-generating words
 forth-wl-new exch-current
