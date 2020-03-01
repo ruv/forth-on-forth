@@ -56,12 +56,12 @@
 
 
 \ Examples of wrappers for non-parsing special words:
-\   : if [: postpone if ;] ct-compilation ; immediate
-\   : >r [: postpone >r ;] ct-compilation ; immediate
+\   : if [: postpone if ;] et-xt ; immediate
+\   : >r [: postpone >r ;] et-xt ; immediate
 \
 : special-words< ( "ccc" -- )
   [: ( addr u -- )
-    compilation-lit, postpone ct-compilation
+    compilation-lit, postpone et-xt
   ;] for-each-def-in-parse-area
 ;
 
@@ -105,14 +105,14 @@ exch-current drop
 
 \ Control-flow stack is another special case
 forth-wl-new exch-current
-  [defined] cs-roll [if]  : cs-roll ( u -- ) y{ -reproduce-or- cs-roll }y ;           [then]
-  [defined] cs-pick [if]  : cs-pick ( u -- ) y{ -reproduce-or- cs-pick }y ;           [then]
-  [defined] cs-drop [if]  : cs-drop (   -- ) y{ c1 if itself, exit then cs-drop }y ;  [then]
+  [defined] cs-roll [if]  : cs-roll ( u -- )    et-lit   ['] cs-roll et-xt  ;   [then]
+  [defined] cs-pick [if]  : cs-pick ( u -- )    et-lit   ['] cs-pick et-xt  ;   [then]
+  [defined] cs-drop [if]  : cs-drop (   -- )             ['] cs-drop et-xt  ;   [then]
 exch-current drop
 
 \ Some other words
 forth-wl-new exch-current
-  [defined] (local) [if]  : (local) ( a u -- ) y{ c1 if slit, itself, exit then (local) }y ;  [then]
+  [defined] (local) [if]  : (local) ( a u -- )  et-slit  ['] (local) et-xt  ;   [then]
   \ NB: the "{:" or "{" word should be defined via this "(local)" to be allowed in "c{ }c"
   \ (a wrapper for "{:" is just longer than usual wrappers)
   [defined] {:      [if]

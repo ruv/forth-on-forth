@@ -76,8 +76,11 @@ exch-current drop
 : ct-slit ( addr u -- ) ['] slit, ct-lit-with ;
 
 
-\ Perform or delay depending on c-state the compilation semantics that is represented by xt
-: ct-compilation ( i*x xt-compilation -- j*x ) y{ -reproduce-or- execute }y ;
+\ Perform or delay depending on c-state the execution semantics of the given token
+: et-xt   ( i*x xt -- j*x )             y{ -reproduce-or- execute }y ; \ former "ct-compilation"
+: et-lit  ( x -- x | )                  y{ -reproduce-or- }y ;
+: et-2lit ( x x -- x x | )              y{ c1 if 2lit, itself, exit then }y ;
+: et-slit ( c-addr u -- c-addr u | )    c1 if slit, ['] et-2lit compile, exit then ;
 
 
 
