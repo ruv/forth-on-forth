@@ -89,6 +89,16 @@
 ;
 
 
+\ Some words are not supported in c{ }c yet,
+\ let them throw an exception if they are used in this context.
+\
+: unsupported-special-words< ( "ccc" -- )
+  [: ( addr u -- )
+    [: c1 abort" \ Error, a non supported word in 'c{ }c'" ;] compile, compilation-sem,
+  ;] for-each-def-in-parse-area
+;
+
+
 
 
 \ Define the wrappers for some special words (in the "forth-wl-new" wordlist)
@@ -115,11 +125,10 @@ forth-wl-new exch-current
   [defined] (local) [if]  : (local) ( a u -- )  et-slit  ['] (local) et-xt  ;   [then]
   \ NB: the "{:" or "{" word should be defined via this "(local)" to be allowed in "c{ }c"
   \ (a wrapper for "{:" is just longer than usual wrappers)
-  [defined] {:      [if]
-    : {:    ( "ccc :}" -- )
-        c1 abort" '{:' is not supported in 'c{ }c' yet"  postpone {:
-    ; immediate
-  [then]
+  unsupported-special-words<  locals|  {:  {
+  \ NB: at the moment, the names of local variables are not supported in c{ }c
+  \ and this case cannot be handled without re-implementing locals.
+  \ So the locals will be just compiled incorrectly.
 exch-current drop
 
 
