@@ -1,24 +1,5 @@
 \ 2020-02-23 ruv
 
-2variable a-lexeme-unresolved
-
-: ?nf ( i*x c-addr u 0 -- j*x -13 | k*x true -- k*x )
-  ?E a-lexeme-unresolved 2!
-  -13 throw \ "undefined word" error
-;
-: ?stack ( -- ) depth 0 < -4 and throw ; \ stack underflow
-
-\ : parse-area ( -- addr u ) source >in @ /string ;
-
-
-: translate-parse-area ( i*x -- j*x )
-  begin parse-lexeme dup while translate-lexeme ?nf ?stack repeat 2drop
-;
-: translate-input ( i*x -- j*x )
-  begin translate-parse-area refill 0= until
-;
-
-
 
 variable a-reset-warm-handler
   :noname 0 0 a-lexeme-unresolved 2! postpone [ ;  a-reset-warm-handler !

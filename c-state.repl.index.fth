@@ -14,15 +14,18 @@ include ./lib/string-match.fth
 include ./lib/resolver/api.fth
 include ./lib/resolver/number.fth
 include ./lib/resolver/word-via-find.fth
-
-include ./lib/repl.fth
-
-:noname a-c-state 0! ; add-reset-warm-handler
+include ./lib/translate.fth
 
 
 forth-wl-new exch-current
   : evaluate ['] translate-parse-area execute-parsing ;
 exch-current drop
+
+
+
+include ./lib/repl.fth
+
+:noname a-c-state 0! ; add-reset-warm-handler
 
 
 : resolve-number-any ( c-addr u -- i*x tt | c-addr u 0 )
