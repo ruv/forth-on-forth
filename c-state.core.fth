@@ -7,8 +7,8 @@ variable a-c-state  a-c-state 0!
 : dec-c ( -- ) -1 a-c-state +! ;
 
 
-\ "c1" returns true if the compilation level is 1, or false otherwise;
-\ if the level > 1 it throws an exception (due to unsupported nesting at the moment).
+\ "c1" returns true if the compilation level is 1, or false if it's 0;
+\ If the level > 1, it throws an exception (since sane compilation semantics for this case is undefined yet).
 : c1 ( -- flag ) a-c-state @ dup 1 = if 0<> exit then dup if a-c-state 0! -29 throw then ; \ -29 compiler nesting
 
 \ Markup words

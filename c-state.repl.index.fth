@@ -18,7 +18,20 @@ include ./lib/translate.fth
 
 
 forth-wl-new exch-current
+
   : evaluate ['] translate-parse-area execute-parsing ;
+
+  \ support for nested c{ c{ ... }c }c
+  : c{ ( i*x -- j*x )
+    c1 if
+      postpone [:  s" }c" translate-input-till  postpone ;]  postpone ct-xt
+    else
+      inc-c  s" }c" translate-input-till  dec-c
+    then
+  ; immediate
+
+  : }c -22 throw ; immediate \ "control structure mismatch"
+
 exch-current drop
 
 
