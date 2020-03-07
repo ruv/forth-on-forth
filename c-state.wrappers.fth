@@ -23,6 +23,14 @@
 : available ( c-addr u -- flag ) ['] [defined] execute-parsing ;
 : unavailable ( c-addr u -- flag ) available 0= ;
 
+\ The "quiet" mode
+[undefined] quietness [undefined] execute-quiet or [if]
+  variable a-quiet
+  : quietness ( -- 0|x ) a-quiet @ ;
+  : execute-quiet ( i*x xt -- j*x ) a-quiet dup @ >r on execute r> a-quiet ! ;
+[then]
+
+
 \ Append the compilation semantics for the given word (by its name)
 : compilation-sem, ( c-addr u -- ) [: postpone postpone ;] execute-parsing ;
 
@@ -36,12 +44,16 @@
 
 
 : ?state ( -- ) state @ 0= if -14 throw then ; \ -14 "interpreting a compile-only word"
-: show-warning-missed-word ( addr u -- ) ." \ Info, a mentioned word isn't found: " type cr ;
+
+: ?show-warning-missed-word ( addr u -- )
+  quietness if 2drop exit then
+  ." \ Info, a mentioned word isn't found: " type cr
+;
 
 : for-each-word-in-parse-area ( xt -- )
   \ xt ( addr u -- ) \ xt is applied to the available word only
   >r begin parse-lexeme dup while
-    2dup unavailable if show-warning-missed-word else r@ execute then
+    2dup unavailable if ?show-warning-missed-word else r@ execute then
   repeat 2drop rdrop
 ;
 : for-each-def-in-parse-area ( xt -- )
@@ -95,7 +107,7 @@
 : unsupported-special-words< ( "ccc" -- )
   [: ( addr u -- )
     [: c1 abort" \ Error, a non supported word in 'c{ }c'" ;] compile, compilation-sem,
-  ;] for-each-def-in-parse-area
+  ;] ['] for-each-def-in-parse-area execute-quiet
 ;
 
 
