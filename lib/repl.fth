@@ -12,7 +12,6 @@ variable a-reset-warm-handler
 ;
 
 : show-prompt ( -- )
-  source-id ?E
   cr
   ."  (" depth 0 u.r ." ) "
   s1 if
@@ -35,15 +34,18 @@ variable a-reset-warm-handler
 ;
 
 : translate-input-interactive ( i*x -- j*x )
-  \ source-id if translate-input exit then
-  \ begin translate-parse-area show-prompt refill 0= until
-  begin show-prompt refill while translate-parse-area repeat
+  begin translate-parse-area show-prompt refill 0= until
+;
+: translate-input-maybe-interactive ( i*x -- j*x )
+  source-id if translate-input else translate-input-interactive then
 ;
 
 : repl ( i*x -- j*x )
-  ." \ Info: Press Ctrl+D on Linux, or Ctrl+Z on Windows to break this REPL." cr
+  source-id 0= if
+    ." \ Info: Press Ctrl+D on Linux, or Ctrl+Z on Windows to break this REPL." cr
+  then
   begin
-    ['] translate-input-interactive catch dup 0= if drop exit then
+    ['] translate-input-maybe-interactive catch dup 0= if drop exit then
     source nip dup 0= swap >in @ u< or >r
     dup show-error-source
       r> if ." \ Stop due to error on refill." cr throw then
