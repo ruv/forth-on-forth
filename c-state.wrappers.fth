@@ -39,8 +39,8 @@
   2>r  postpone [:  2r> compilation-sem,  postpone ;]
 ;
 
-: start-def-named ( c-addr u -- ) ['] : execute-parsing ;
-: end-def ( c-addr u -- ) postpone ; ;
+: start-def-named ( c-addr u -- ) ( C: -- colon-sys ) ['] : execute-parsing ;
+: end-def ( -- ) ( C: colon-sys -- ) postpone ; ;
 
 
 : ?state ( -- ) state @ 0= if -14 throw then ; \ -14 "interpreting a compile-only word"
