@@ -42,8 +42,8 @@ include ./lib/repl.fth
 
 
 : resolve-number-any ( c-addr u -- i*x tt | c-addr u 0 )
-  resolve-dn-dot-radix      ?ET
-  resolve-n-radix           ?ET
+  resolve-dn-dot-prefixed   ?ET
+  resolve-n-prefixed        ?ET
 
   [defined] resolve-fn-e            [if]
   resolve-fn-e              ?ET     [then]

@@ -34,14 +34,14 @@
 : execute-with-base ( i*x base xt -- j*x )
   base @ >r swap base ! execute r> base !
 ;
-: resolve-n-radix ( c-addr u -- x tt | c-addr u 0 )
+: resolve-n-prefixed ( c-addr u -- x tt | c-addr u 0 )
   2dup extract-radix ?dup 0= if 2drop resolve-n exit then
   ['] resolve-n execute-with-base dup if 2nip exit then nip nip
 ;
-: resolve-dn-radix ( c-addr u -- x x tt | c-addr u 0 )
+: resolve-dn-prefixed ( c-addr u -- x x tt | c-addr u 0 )
   2dup extract-radix ?dup 0= if 2drop resolve-dn exit then
   ['] resolve-dn execute-with-base dup if >r 2nip r> exit then nip nip
 ;
-: resolve-dn-dot-radix ( c-addr u -- x tt | c-addr u 0 )
-  [char] . match-tail-char ?E0 resolve-dn-radix ?ET char+ 0
+: resolve-dn-dot-prefixed ( c-addr u -- x tt | c-addr u 0 )
+  [char] . match-tail-char ?E0 resolve-dn-prefixed ?ET char+ 0
 ;
