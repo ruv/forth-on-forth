@@ -22,12 +22,12 @@
 [then]
 
 
-: match-head-char ( c-addr u c -- c-addr2 u2 true | c-addr u false )
+: match-char-head ( c-addr u c -- c-addr2 u2 true | c-addr u false )
   over 0= if drop false exit then
   >r over c@ r> = ?E0 1 chars /string true
 ;
 
-: match-tail-char ( c-addr u c -- c-addr u2 true | c-addr u false )
+: match-char-tail ( c-addr u c -- c-addr u2 true | c-addr u false )
   over 0= if drop false exit then
   >r 2dup + char- c@  r> = ?E0 char- true
 ;

@@ -10,12 +10,12 @@
   2dup 0 0 2swap >number nip if 2drop 0 exit then 2nip ['] tt-2lit
 ;
 : resolve-dn ( c-addr u -- x x tt | c-addr u 0 )
-  [char] - match-head-char >r
+  [char] - match-char-head >r
   resolve-dun dup if r> if >r dnegate r> then exit then
   drop r> if -1 chars /string then  0
 ;
 : resolve-dn-dot ( c-addr u -- x x tt | c-addr u 0 )
-  [char] . match-tail-char ?E0 resolve-dn ?ET char+ 0
+  [char] . match-char-tail ?E0 resolve-dn ?ET char+ 0
 ;
 : resolve-un ( c-addr u -- x tt | c-addr u 0 )
   resolve-dun dup if 2drop ['] tt-lit then
@@ -43,5 +43,5 @@
   ['] resolve-dn execute-with-base dup if >r 2nip r> exit then nip nip
 ;
 : resolve-dn-dot-prefixed ( c-addr u -- x tt | c-addr u 0 )
-  [char] . match-tail-char ?E0 resolve-dn-prefixed ?ET char+ 0
+  [char] . match-char-tail ?E0 resolve-dn-prefixed ?ET char+ 0
 ;
