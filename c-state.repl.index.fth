@@ -57,7 +57,7 @@ include ./lib/repl.fth
   false
 ;
 
-' resolve-lexeme-default set-resolver
+' resolve-lexeme-default set-perceptor
 
 
 forth-wl-new >order definitions

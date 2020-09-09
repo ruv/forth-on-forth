@@ -1,16 +1,20 @@
 \ 2006, 2007, 2018-08, 2020-02
 \ ruv
 
-variable a-current-resolver \ current lexeme resolver
+variable a-perceptor \ slot for a lexeme resolver that is currently used by the system
 
-: set-resolver      ( xt -- ) a-current-resolver ! ;
-: resolver          ( -- xt ) a-current-resolver @ ;
+: set-perceptor     ( xt -- ) a-perceptor ! ;
+: perceptor         ( -- xt ) a-perceptor @ ;
 
-
-: resolve-lexeme ( c-addr u -- k*x xt-tt | c-addr u 0 )
-  resolver dup if execute then
+: perceive ( c-addr u -- k*x xt-tt | c-addr u 0 )
+  perceptor execute
 ;
+
+\ translate fully qualified token
+: translate-qtoken ( i*x k*x xt-tt -- j*x true | k*x 0 -- k*x 0 )
+  dup if execute true then
+;
+\ translate a lexeme in the current dynamic context
 : translate-lexeme ( i*x c-addr u -- j*x true | c-addr u 0 )
-  resolve-lexeme dup if execute true then
+  perceive translate-qtoken
 ;
-\ NB: "translate-token" is just "execute"
