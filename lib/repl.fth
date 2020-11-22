@@ -51,7 +51,7 @@ variable a-reset-warm-handler
       r> if ." \ Stop due to error on refill." cr throw then
       source-id if ." \ Stop due to non-zero source-id." cr throw then
     drop
-    >in 1+! \ to avoid endless loop
+    ['] \ execute
     reset-warm
   again
 ;
