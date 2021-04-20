@@ -4,7 +4,7 @@ Load "c-state.repl.index.fth" and run "repl" word.
 
 
 
-Coments and parsing words works properly:
+Coments and parsing words work properly:
 
   : foo ." adding some semantics" c{ ( x -- ) if ." true" else ." false" then }c ; immediate
 
