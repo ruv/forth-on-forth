@@ -9,11 +9,11 @@ variable state-dirty  \ private
 
 : execute-compiling ( i*x xt --j*x )
   state @ if  execute  exit  then
-  state-on state-dirty off  execute  state-dirty @ if exit then state-off
+  state-dirty @ >r state-on state-dirty off  execute  state-dirty @ if rdrop exit then state-off r> state-dirty !
 ;
 : execute-interpreting ( i*x xt --j*x )
   state @ 0= if  execute  exit  then
-  state-off state-dirty off  execute  state-dirty @ if exit then state-on
+  state-dirty @ >r state-off state-dirty off  execute  state-dirty @ if rdrop exit then state-on r> state-dirty !
 ;
 
 : postpone ( -- ) \ "name"
