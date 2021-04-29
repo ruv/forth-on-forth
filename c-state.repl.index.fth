@@ -8,6 +8,7 @@ include ./c-state.fth
 \ get-current
 support-c-state >order definitions
 
+include ./buildup/state-control.fth
 
 include ./lib/control-flow.fth
 include ./lib/string-match.fth
