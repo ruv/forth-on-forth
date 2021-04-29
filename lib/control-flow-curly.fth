@@ -34,6 +34,10 @@ here 255 or constant _magic-for-end
 : when{} ( u1 xt -- orig u2 xt ) postpone 0= postpone if end{ postpone then end } ; immediate
 : }when end ; immediate
 : otherwise{ end{ }end ; immediate
+: of{ ( xt -- orig u1 xt xt2 ) postpone over postpone = postpone if postpone drop end{ postpone else end{ postpone then end } } ; immediate
+: }of end ; immediate
+: of{} ( u1 xt -- orig u2 xt ) postpone of{ postpone }of ; immediate
+
 
 : repeat{ postpone begin  0 end{ >r postpone again r> 0 ?do postpone then loop } ; immediate
 : }repeat end ; immediate

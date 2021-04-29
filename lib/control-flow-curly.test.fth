@@ -11,6 +11,9 @@ T{ [: 2 0 do i unless{ 0 } 9 loop ;] execute -> 0 9 9 }T
 T{ [: 5 0 do i choose{ 1 =? when{ 1 } 2 =? when{ 2 } 3 =? when{} 4 =? when{ 4 } 5 }choose loop ;] execute -> 0 5 1 2 4 }T
 T{ [: choose{ 1 0 when{  } 2 0 when{  } 3 0 when{} 4 0 when{ } 5 }choose ;] execute -> 1 2 3 4 5 }T
 
+\ choose{ of{ } }
+T{ [: 5 0 do i choose{ 1 of{ 1 } 2 of{ 2 } 3 of{} 4 of{ 4 } otherwise{ drop 5 } }choose loop ;] execute -> 5 1 2 4 }T
+
 \ repeat{ if-break{ } unless-break{ } }
 T{ [: 3 repeat{ dup 0= if-break{ 9 } dup 1- } ;] execute -> 3 2 1 0 9 }T
 T{ : t2 repeat{ 1 =? if-break{ 1 } dup 2 = if-break{} dup 3 <> unless-break{ 0 } dup 4 <> unless-break{} 9 exit } ; -> }T
