@@ -9,7 +9,9 @@
 \ 2021-04-02 --- add "_magic-for-end"
 
 \ After implementing this, something similar was found in Forth Dimensions,
-\ see: "Curly Control Structure Set" (FD 13/5, 14/1)
+\ see: "Curly Control Structure Set" in FD 13/6 and FD 14/1 (1992).
+\   https://archive.org/details/Forth_Dimension_Volume_13_Number_6/page/n21/mode/2up
+\   https://archive.org/details/Forth_Dimension_Volume_14_Number_1/page/n25/mode/2up
 
 
 here 255 or constant _magic-for-end
