@@ -4,6 +4,6 @@
 
 T{ ' s ' execute-compiling ' execute-interpreting  ' execute-compiling t -> -1 0 }T
 
-T{ :noname s state-on ; ' execute-compiling ' execute-interpreting  ' execute-compiling t -> -1 -1 }T
+T{ :noname s state-on ; ' execute-compiling ' execute-interpreting  ' execute-compiling t -> -1 0 }T
 
-T{ :noname s state-on  ['] s execute-interpreting ;  ' execute-compiling t -> -1 0 -1 }T
+T{ :noname s state-on  ['] s execute-interpreting ;  ' execute-compiling t -> -1 0 0 }T
