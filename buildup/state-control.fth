@@ -6,14 +6,15 @@
 \   https://github.com/ForthHub/discussion/discussions/103
 \     -- About POSTPONE semantics in edge cases
 
-: state-on  ( -- )  ] ;
-: state-off ( -- )  postpone [ ; \  [ ' [ compile, ]
+: compilation  ( -- flag )  state @ 0<> ;
+: enter-compilation  ( -- )           ] ;
+: leave-compilation  ( -- )  postpone [ ;
 
 : execute-compiling ( i*x xt --j*x )
-  state @ if  execute  exit  then
-  state-on  execute  state-off
+  compilation     if  execute  exit  then
+  enter-compilation  execute  leave-compilation
 ;
 : execute-interpreting ( i*x xt --j*x )
-  state @ 0= if  execute  exit  then
-  state-off  execute  state-on
+  compilation 0=  if  execute  exit  then
+  leave-compilation  execute  enter-compilation
 ;
