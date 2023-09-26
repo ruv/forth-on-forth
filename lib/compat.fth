@@ -42,7 +42,12 @@
 : parse-lexeme parse-word ;
 : parse-name parse-word ;
 [else]
-: parse-lexeme ( -- addr u ) bl parse ;
+: parse-lexeme ( -- addr u ) \ via "word"
+  bl word c@ dup 0= if source chars + swap exit then ( u )
+  source drop >in @ 1- chars +  2dup  ( u addr2 u addr2 )
+  c@ bl u> 0= abs  1- + ( u addr2 u2 )
+  chars - swap
+;
 : parse-name ( -- addr u ) parse-lexeme ;
 [then] [then] [then]
 
