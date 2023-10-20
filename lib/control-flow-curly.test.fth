@@ -18,3 +18,26 @@ T{ [: 5 0 do i choose{ 1 of{ 1 } 2 of{ 2 } 3 of{} 4 of{ 4 } otherwise{ drop 5 } 
 T{ [: 3 repeat{ dup 0= if-break{ 9 } dup 1- } ;] execute -> 3 2 1 0 9 }T
 T{ : t2 repeat{ 1 =? if-break{ 1 } dup 2 = if-break{} dup 3 <> unless-break{ 0 } dup 4 <> unless-break{} 9 exit } ; -> }T
 T{ [: 6 1 do i t2 loop ;] execute -> 1 2 3 0 4 5 9 }T
+
+
+: tch ( n1 -- n2 ) \ test choose
+  choose{
+    dup -5 < when{} \ just skip other cases
+    dup 0<  when{ drop  10  }
+    0       of{         20  }
+    1       of{         30  }
+    9 <     when{       40  }
+                        50
+    otherwise{          60  }
+                        70
+  }choose
+;
+
+t{ -7 tch -> -7 }t
+t{ -2 tch -> 10 }t
+t{  0 tch -> 20 }t
+t{  1 tch -> 30 }t
+t{  2 tch -> 40 }t
+t{  8 tch -> 40 }t
+t{  9 tch -> 50 60 70 }t
+t{ 10 tch -> 50 60 70 }t
