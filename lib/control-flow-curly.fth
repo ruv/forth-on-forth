@@ -29,34 +29,41 @@ here 255 or constant _magic-for-end
 : end ( i*x end-sys -- j*x ) _magic-for-end <> -22 and throw  execute ;
 : } ( i*x end-sys -- j*x ) end ; immediate
 
-: end{  p( [: )  [: p( ;] _magic-for-end ) ;]  _magic-for-end ; immediate
-: }end end ; immediate
+: end{ ( -- quotation-sys end-sys ) p( [: )  [: p( ;] _magic-for-end ) ;]  _magic-for-end ; immediate
+: }end ( quotation-sys end-sys -- ) end ; immediate
+\ "}end" Run-time: ( -- end-sys )
 
 
-: if{       p( if )  end{ p( then ) } ; immediate
-: unless{   p( 0= if{ ) ; immediate
-: }unless end ; immediate
-: }if end ; immediate
+: if{       ( -- orig end-sys ) p( if )  end{ p( then ) } ; immediate
+: unless{   ( -- orig end-sys ) p( 0= if{ ) ; immediate
+: }unless   ( orig end-sys -- ) end ; immediate
+: }if       ( orig end-sys -- ) end ; immediate
 
-: choose{ end{ }end ; immediate
-: }choose end ; immediate
+: choose{ ( -- end-sys ) end{ }end ; immediate
+: }choose ( end-sys i*{ orig end-sys } -- ) end ; immediate
 : when{   ( -- orig end-sys ) p( if )  end{ p( else )  end{ p( then ) end }end  }end  ; immediate
 : when{}  ( -- orig end-sys ) p( 0= if )               end{ p( then ) end }end        ; immediate
-: }when end ; immediate
-: otherwise{ end{ }end ; immediate
+: }when   ( orig1 end-sys1 -- orig2 end-sys2 ) end ; immediate
+: otherwise{ ( -- end-sys ) end{ }end ; immediate
+: }otherwise ( end-sys -- ) end       ; immediate
 : of{     ( -- orig end-sys ) p( over = if drop )  end{ p( else ) end{ p( then ) end }end  }end  ; immediate
-: }of end ; immediate
+: }of     ( orig1 end-sys1 -- orig2 end-sys2 ) end ; immediate
 : of{}    ( -- orig end-sys ) p( of{ }of ) ; immediate
 
 
-: repeat{ p( begin ) 0  end{ >r p( again ) r> 0 ?do p( then ) loop }end ; immediate
-: }repeat end ; immediate
+: repeat{ ( -- dest 0 end-sys ) p( begin ) 0  end{ >r p( again ) r> 0 ?do p( then ) loop }end ; immediate
+: }repeat ( u*orig dest u end-sys -- ) end ; immediate
 
 \ ( u1 end-sys1 -- orig u2 end-sys1 end-sys2 )
 : if-break{   2>r >r  p( if )  r> 1+ 2r>  end{ 2>r >r  p( else )  1 cs-roll r> 2r> } ; immediate
+\ ( dest u1 end-sys1 -- orig dest u2 end-sys1 )
 : if-break{}  2>r >r  p( 0= if )  1 cs-roll r> 1+ 2r> ; immediate
+\ ( dest orig1 u2 end-sys1 end-sys2 -- orig2 dest u2 end-sys1 )
 : }if-break end ; immediate
 
+\ ( dest u1 end-sys1 -- dest orig u2 end-sys1 end-sys2 )
 : unless-break{   2>r >r  p( 0= if )  r> 1+ 2r>  end{ 2>r >r  p( else )  1 cs-roll r> 2r> } ; immediate
+\ ( dest u1 end-sys1 -- orig dest u2 end-sys1 )
 : unless-break{}  2>r >r  p( if )  1 cs-roll r> 1+ 2r> ; immediate
+\ ( dest orig1 u2 end-sys1 end-sys2 -- orig2 dest u2 end-sys1 )
 : }unless-break end ; immediate
