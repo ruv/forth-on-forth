@@ -72,3 +72,16 @@ here 255 or constant _magic-for-end
 : unless-break{}  _u+{  p( if )  1 cs-roll } ; immediate
 \ ( dest orig1 u2 end-sys1 end-sys2 -- orig2 dest u2 end-sys1 )
 : }unless-break end ; immediate
+
+
+\ ( dest u end-sys -- dest u end-sys )
+: if-cont{}       _u{ p( if ) 1 cs-pick p( again then ) } ; immediate
+: unless-cont{}   p( 0= if-cont{} ) ; immediate
+
+\ ( dest1 u end-sys1 -- dest1 orig dest1 u end-sys1 end-sys2 )
+: if-cont{        _u{ p( if ) 1 cs-pick }  end{ _u{ p( again then ) } } ; immediate
+: unless-cont{    p( 0= if-cont{ ) ; immediate
+
+\ ( dest1 orig dest1 u end-sys1 end-sys2 -- dest1 u end-sys1 )
+: }if-cont        end ; immediate
+: }unless-cont    end ; immediate
