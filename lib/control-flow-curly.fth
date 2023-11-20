@@ -54,16 +54,21 @@ here 255 or constant _magic-for-end
 : repeat{ ( -- dest 0 end-sys ) p( begin ) 0  end{ >r p( again ) r> 0 ?do p( then ) loop }end ; immediate
 : }repeat ( u*orig dest u end-sys -- ) end ; immediate
 
+
+\ private helpers: the enclosed code is performed under ( u end-sys )
+: _u{    p( 2>r >r )  end{ p( r>    2r> ) } ; immediate
+: _u+{   p( 2>r >r )  end{ p( r> 1+ 2r> ) } ; immediate
+
 \ ( u1 end-sys1 -- orig u2 end-sys1 end-sys2 )
-: if-break{   2>r >r  p( if )  r> 1+ 2r>  end{ 2>r >r  p( else )  1 cs-roll r> 2r> } ; immediate
+: if-break{  _u+{ p( if ) }  end{ _u{ p( else )  1 cs-roll } } ; immediate
 \ ( dest u1 end-sys1 -- orig dest u2 end-sys1 )
-: if-break{}  2>r >r  p( 0= if )  1 cs-roll r> 1+ 2r> ; immediate
+: if-break{} _u+{ p( 0= if )  1 cs-roll } ; immediate
 \ ( dest orig1 u2 end-sys1 end-sys2 -- orig2 dest u2 end-sys1 )
 : }if-break end ; immediate
 
 \ ( dest u1 end-sys1 -- dest orig u2 end-sys1 end-sys2 )
-: unless-break{   2>r >r  p( 0= if )  r> 1+ 2r>  end{ 2>r >r  p( else )  1 cs-roll r> 2r> } ; immediate
+: unless-break{   _u+{  p( 0= if )  }  end{ _u{  p( else )  1 cs-roll } } ; immediate
 \ ( dest u1 end-sys1 -- orig dest u2 end-sys1 )
-: unless-break{}  2>r >r  p( if )  1 cs-roll r> 1+ 2r> ; immediate
+: unless-break{}  _u+{  p( if )  1 cs-roll } ; immediate
 \ ( dest orig1 u2 end-sys1 end-sys2 -- orig2 dest u2 end-sys1 )
 : }unless-break end ; immediate
