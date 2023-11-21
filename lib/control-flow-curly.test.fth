@@ -22,6 +22,9 @@ T{ [: 6 1 do i t2 loop ;] execute -> 1 2 3 0 4 5 9 }T
 \ repeat{ if-cont{ } unless-cont{ } }repeat
 t{ [: 3 repeat{ dup 0< if-break{} 1- dup 1 < if-cont{ 1 swap }  dup 2 < if-cont{ 2 swap }  3 swap } ;] execute -> 3 2 1 1 -1 }t
 
+\ repeat{ if-cont{} unless-cont{} }repeat
+t{ [: 3 repeat{ dup 0< if-break{} 1- dup 1 < if-cont{} 1 swap dup 2 < unless-cont{} 2 swap } ;] execute -> 1 1 2 -1 }t
+
 
 : tch ( n1 -- n2 ) \ test choose
   choose{

@@ -75,8 +75,8 @@ here 255 or constant _magic-for-end
 
 
 \ ( dest u end-sys -- dest u end-sys )
-: if-cont{}       _u{ p( if ) 1 cs-pick p( again then ) } ; immediate
-: unless-cont{}   p( 0= if-cont{} ) ; immediate
+: unless-cont{}   _u{ 0 cs-pick p( until ) } ; immediate
+: if-cont{}       p( 0= unless-cont{} ) ; immediate
 
 \ ( dest1 u end-sys1 -- dest1 orig dest1 u end-sys1 end-sys2 )
 : if-cont{        _u{ p( if ) 1 cs-pick }  end{ _u{ p( again then ) } } ; immediate
