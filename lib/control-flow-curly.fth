@@ -26,7 +26,9 @@ here 255 or constant _magic-for-end
   repeat 2drop
 ; immediate
 
-: end ( i*x end-sys -- j*x ) _magic-for-end <> -22 and throw  execute ;
+: ?end-sys ( end-sys -- end-sys ) dup _magic-for-end <> -22 and throw ;
+
+: end ( i*x end-sys -- j*x ) ?end-sys drop execute ;
 : } ( i*x end-sys -- j*x ) end ; immediate
 
 : end{ ( -- quotation-sys end-sys ) p( [: )  [: p( ;] _magic-for-end ) ;]  _magic-for-end ; immediate
@@ -56,8 +58,8 @@ here 255 or constant _magic-for-end
 
 
 \ private helpers: the enclosed code is performed under ( u end-sys )
-: _u{    p( 2>r >r )  end{ p( r>    2r> ) } ; immediate
-: _u+{   p( 2>r >r )  end{ p( r> 1+ 2r> ) } ; immediate
+: _u{    p( ?end-sys 2>r >r )  end{ p( r>    2r> ) } ; immediate
+: _u+{   p( ?end-sys 2>r >r )  end{ p( r> 1+ 2r> ) } ; immediate
 
 \ ( u1 end-sys1 -- orig u2 end-sys1 end-sys2 )
 : if-break{  _u+{ p( if ) }  end{ _u{ p( else )  1 cs-roll } } ; immediate
