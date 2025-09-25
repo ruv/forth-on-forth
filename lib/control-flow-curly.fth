@@ -18,15 +18,15 @@
 
 here 255 or constant _magic-for-end
 
-\ The data type "end-sys" is ( xt x.magic )
+\ DataType: end-sys ⇒ ( xt x.magic )
 
-: p( ( "ccc<rparen>" -- ) \ Apply "postpone" to each word in the input stream until reach ")"
-  begin parse-name dup 0= if 2drop refill 0= abort" (error, unexpected end of stream)" recurse exit then
+: p( ( "ccc <rparen>" -- ) \ Apply "postpone" to each lexeme in the input stream until the lexeme ")" is encountered
+  begin parse-name dup 0= if 2drop refill  0= -39 and throw  recurse exit then
     2dup s" )" compare while  nip 1+ negate >in @ + 0 max >in !  postpone postpone
   repeat 2drop
 ; immediate
 
-: ?end-sys ( end-sys -- end-sys ) dup _magic-for-end <> -22 and throw ;
+: ?end-sys ( end-sys -- end-sys  |  any\end-sys -- never ) dup _magic-for-end <> -22 and throw ;
 
 : end ( i*x end-sys -- j*x ) ?end-sys drop execute ;
 : } ( i*x end-sys -- j*x ) end ; immediate
